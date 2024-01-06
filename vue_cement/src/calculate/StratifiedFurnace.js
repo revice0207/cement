@@ -1,4 +1,4 @@
-// PH锅炉的热量收支计算方程流程
+// 分解炉的热量收支计算方程流程
 // 部分常量定义
 // 各个气体的体积分数
 const carbonMonoxideVolumeFraction = 0.1;
