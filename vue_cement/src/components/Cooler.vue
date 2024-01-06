@@ -12,9 +12,6 @@
         </div>
       </div>
       <div class="upload-text">
-        <p>• 为展示更清晰的，可通过上传图片进行人流量预测</p>
-        <p>• 支持多种上传图片的格式，大小不限</p>
-        <p>• 单张图片的上传会返回模型预测结果和运行速度等数据</p>
       </div>
     </div>
     <div class="show-img">
@@ -24,10 +21,6 @@
       </div>
       <div class="show-analysis">
         <div class="analysis-data">
-          <p>• 图片读取时间：<span>{{read_img_time}}</span></p>
-          <p>• 模型加载时间：<span>{{load_model_time}}</span></p>
-          <p>• 模型预测时间：<span>{{pre_time}}</span></p>
-          <p>• 模型预测人数：<span>{{pre_numbers}}</span></p>
         </div>
         <div class="analysis-img">
           <img src="../assets/main_head_img.png" />

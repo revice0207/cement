@@ -3,14 +3,14 @@
     <div class="img-video">
       <div class="flipped-image">
 <!--        <img v-if="!isStart" src="../assets/logo1.png" style="width: 100%; height: 100%;" />-->
-        <div v-if="!isStart">未开启服务</div>
+        <div v-if="!isStart"></div>
         <img v-else ref="videoPlayer" style="width: 100%; height: 100%;" />
       </div>
       <div class="img-right">
         <div class="img-right-item" @click="startVideoStream">
           <div class="right-item-left">
-            <p class="p-head">动态视频流</p>
-            <p class="p-content">显示树莓派摄像头的实时视频流</p>
+            <p class="p-head"></p>
+            <p class="p-content"></p>
           </div>
           <div class="right-item-right">
             <img src="../assets/main_head_img.png" style="width: 100%;position: absolute;bottom: 0px;">
@@ -18,8 +18,8 @@
         </div>
         <div class="img-right-item" @click="runModel">
           <div class="right-item-left">
-            <p class="p-head">人流量监测</p>
-            <p class="p-content">开启人流量监测并统计人数</p>
+            <p class="p-head"></p>
+            <p class="p-content"></p>
           </div>
           <div class="right-item-right">
             <img src="../assets/main_head_img.png" style="width: 100%;position: absolute;bottom: 0px;">
@@ -27,8 +27,8 @@
         </div>
         <div class="img-right-data">
           <div class="data-head">
-            <p v-if="!isOpen">未开启检测</p>
-            <p v-if="isOpen">监测结果</p>
+            <p v-if="!isOpen">未开启</p>
+            <p v-if="isOpen">结果</p>
             <Icon v-if="!isOpen" type="ios-alert-outline" size="20"/>
             <Icon v-if="isOpen" type="md-checkmark-circle-outline" color="#B6EDC4" size="20"/>
           </div>
@@ -37,7 +37,7 @@
               <div class="data-content-left">
                 <div class="data">
                   <Icon type="ios-body" color="#868686" size="16"/>
-                  <p>已识别人数：<span style="font-weight: bolder; color: #3862F7">{{ pre_num }}</span></p>
+                  <p><span style="font-weight: bolder; color: #3862F7">{{ pre_num }}</span></p>
                 </div>
               </div>
               <div class="data-content-right"></div>
@@ -59,19 +59,19 @@ export default {
     return{
       headList:[
         {
-          title:'未处理图像',
+          title:'未处理',
           counts:86,
           icon:'ios-at',
           text:'Available hospital beds'
         },
         {
-          title:'已处理图像',
+          title:'已处理',
           counts:127,
           icon:'ios-at',
           text:'Available hospital beds'
         },
         {
-          title:'未数据分析图像',
+          title:'未数据分析',
           counts:100,
           icon:'ios-at',
           text:'Available hospital beds'

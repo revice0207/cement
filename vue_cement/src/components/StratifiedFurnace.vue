@@ -101,15 +101,15 @@
           </ul>
           <!-- 功能列表 -->
           <div class="tags-icons">
-            <div class="icons-refresh" @click="reloadPage" title="刷新当前标签页">
+            <div class="icons-refresh" @click="reloadPage" title="">
               <Icon type="md-refresh" />
             </div>
             <div class="icons-close" title="关闭标签">
               <Dropdown trigger="click" @on-click="closeTags">
                 <Icon type="ios-options" />
                 <DropdownMenu slot="list">
-                  <DropdownItem name="1">关闭其他标签</DropdownItem>
-                  <DropdownItem name="2">关闭所有标签</DropdownItem>
+                  <DropdownItem name="1"></DropdownItem>
+                  <DropdownItem name="2"></DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -117,7 +117,6 @@
         </div>
       </div>
       <!--   页面主体   -->
-
       <div class="main-content">
         <div class="view-c">
           <keep-alive :include="keepAliveData">
@@ -358,7 +357,6 @@ export default {
         }
       }
     },
-
     // 判断当前标签页是否激活状态
     isActive(name) {
       return this.$route.name === name
@@ -427,32 +425,7 @@ export default {
           })
         }
       })
-    },
-    // 消息通知
-    info() {
-      const self = this
-      this.$Notice.info({
-        title: `您有${this.msgNum}条消息`,
-        render(h) {
-          return h('Button', {
-            attrs: {
-              type: 'info',
-              size: 'small',
-            },
-            on: {
-              click() {
-                // 点击查看跳转到消息页
-                self.gotoPage('msg')
-                self.hasNewMsg = false
-                self.msgNum = 0
-              },
-            },
-          }, [
-            '点击查看',
-          ])
-        },
-      })
-    },
+    }
   }
 }
 </script>

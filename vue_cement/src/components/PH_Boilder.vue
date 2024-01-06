@@ -1,27 +1,24 @@
 <template>
   <div class="threeD">
     <div class="threeD-left">
-      <div class="head">
-        人流量监测视频演示
-      </div>
+      <div class="head"></div>
       <div class="video-content">
-        <div v-if="!isOpen">未开启视频检测</div>
+        <div v-if="!isOpen"></div>
         <img v-else :src="videoURL" />
       </div>
       <div class="msg">
-        <Button class="video-btn" icon="md-power" @click="startVideo">播放</Button>
-        <Button class="video-btn" icon="md-refresh" @click="refreshPage">停止</Button>
+        <Button class="video-btn" icon="md-power" @click="startVideo"></Button>
+        <Button class="video-btn" icon="md-refresh" @click="refreshPage"></Button>
       </div>
     </div>
     <div class="threeD-right">
       <div id="mychart" class="right-chart"></div>
       <div class="right-data">
-        <div class="title">四个数据及表格展示为每一帧的实际内容，在此以1s一帧的速率展示各个数据</div>
         <div class="content">
-          <p>• 图片读取时间：<span>{{read_img_time}}</span></p>
-          <p>• 模型加载时间：<span>{{load_model_time}}</span></p>
-          <p>• 模型预测时间：<span>{{pre_time}}</span></p>
-          <p>• 模型预测人数：<span>{{pre_numbers}}</span></p>
+          <p>• <span>{{read_img_time}}</span></p>
+          <p>• <span>{{load_model_time}}</span></p>
+          <p>• <span>{{pre_time}}</span></p>
+          <p>• <span>{{pre_numbers}}</span></p>
         </div>
       </div>
     </div>
@@ -37,8 +34,8 @@ export default {
     return{
       videoURL:'',
       data:[1,2,3,4,5],
-      xData: [1,2,3,4,5,6,7,8,9,10], //横坐标
-      yData: [], //人数数据
+      xData: [1,2,3,4,5,6,7,8,9,10],
+      yData: [],
       data_json : data,
       tempList:[],
       addData:{
@@ -48,14 +45,14 @@ export default {
           data: this.xData
         },
         yAxis: {
-          name:'识别人数',
+          name:'',
           type:'value'
         },
         series: [
           {
             // data: this.yData,
             data: [],
-            type: "line", // 类型设置为折线图
+            type: "line", // 类型设置为饼图
             areaStyle:{}
           }
         ],
@@ -117,7 +114,7 @@ export default {
   mounted() {
     this.myChart = echarts.init(document.getElementById("mychart"), 'light');
     this.myChart.setOption(this.addData, 1000);
-    //随着屏幕大小调节图表
+    //随着屏幕大小调节
     window.addEventListener("resize", () => {
       this.myChart.resize();
     });
