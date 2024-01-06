@@ -1,0 +1,284 @@
+{
+  "data": [
+    {
+      "index": 1,
+      "name": "HP_boiler",
+      "menu_title": "PH锅炉",
+      "latexList": [
+        {
+          "latexItem": "$$ \\rho_f=\\frac{C O_2^f \\times \\rho_{C O_2}+C O^f \\times \\rho_{C O}+O_2^f \\times \\rho_{O_2}+N_2^f \\times \\rho_{N_2}+H_2 O^f \\times \\rho_{H_2 O}}{100}\n $$",
+          "latexContent": "预热器废气计算公式"},
+        {
+          "latexItem": "$$\nm_{f h}=\\frac{V_f \\times K_{f h}}{M_{s h}}\n$$",
+          "latexContent": "预热器飞灰公式"
+        },
+        {
+          "latexItem": "$$\nm_{P w}=\\frac{V_{P w}}{M_{s h}} \\times \\rho_w\n$$",
+          "latexContent": "进入PH液态水公式"
+        },
+        {
+          "latexItem": "$$\n\\mathrm{c}_f=\\frac{\\mathrm{CO}_2^f \\times \\mathrm{c}_{\\mathrm{CO}_2}^f+\\mathrm{CO}^f \\times \\mathrm{c}_{C O}^f+\\mathrm{O}_2^f \\times \\mathrm{c}_{O_2}^f+\\mathrm{N}_2^f \\times \\mathrm{c}_{N_2}^f+\\mathrm{H}_2 \\mathrm{O}^f \\times \\mathrm{c}_{\\mathrm{H}_2 \\mathrm{O}}^f}{100}\n$$",
+          "latexContent": "进入PH废气显热公式"
+        },
+        {
+          "latexItem": "$$\nQ_{f h}=m_{f h} \\times c_{f h} \\times t_f\n$$",
+          "latexContent": "进入PH飞灰显热公式"
+        },
+        {
+          "latexItem": "$$\nQ_{P w}=m_{P w} \\times c_w \\times t_{P w}\n$$",
+          "latexContent": "进入PH液态水显热公式"
+        },
+        {
+          "latexItem": "$$\nm_f^{\\prime}=m_f\n$$",
+          "latexContent": "离开PH锅炉的废气"
+        },
+        {
+          "latexItem": "$$\nm_{f h}^{\\prime}=m_{f h}\n$$",
+          "latexContent": "离开PH锅炉的飞灰"
+        },
+        {
+          "latexItem": "$$\nm_{f h}^{\\prime}=m_{f h}\n$$",
+          "latexContent": "离开PH锅炉的水蒸气"
+        },
+        {
+          "latexItem": "$$\nm_{f h}^{\\prime}=m_{f h}\n$$",
+          "latexContent": "离开PH锅炉废气显热"
+        },
+        {
+          "latexItem": "$$\nm_{f h}^{\\prime}=m_{f h}\n$$",
+          "latexContent": "离开PH锅炉飞灰显热"
+        },
+        {
+          "latexItem": "$$\nm_{f h}^{\\prime}=m_{f h}\n$$",
+          "latexContent": "离开PH锅炉水蒸气显热"
+        }
+      ],
+      "markDownText": "### 1. PH锅炉\n\n物质流：预热器废气，预热器飞灰，液态水，废气量，飞灰量（5种的计算方式）\n\n（1）预热器废气：mf\n\n（2） 预热器飞灰：mfh\n\n（3）液态水：mpw\n\n锅炉部分进入节点的物质流总量：mf+mfh+mpw\n\n---\n\n能量流：废弃显热，飞灰显热，液态水显热\n\n（1）废气显热：Qf\n\n（2）飞灰显热：Qfh\n\n（3）液态水显热：Qpw\n\n锅炉部分进入节点的能量总和：Qf+Qfh+Qpw\n\n---\n\n离开物质流：离开废气，离开飞灰m，离开水蒸气\n\n锅炉部分离开节点的物质总量：m’f+m’fh+m’Pzq\n\n---\n\n离开能量流：\n\n（1）废气显热：Qpf\n\n（2）飞灰显热：Qpfh\n\n（3）水蒸气显热：Qpzq\n\n锅炉部分离开节点的能量总和：Qpf+Qpfh+Qpzq",
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyWasteGasVolume",
+          "value":0.0,
+          "title":"每千克熟料预热器出口废气量",
+          "latexItem":"$V_f$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyLiquidWaterVolume",
+          "value":0.0,
+          "title":"每小时进入PH锅炉液态水的体积",
+          "latexItem":"$V_{Pw}$"
+        },
+        {
+          "index":4,
+          "data":"hourlyWaterVaporVolume",
+          "value":0.0,
+            "title":"每小时PH锅炉产生水蒸气体积",
+          "latexItem":"$V_{Pzq}$"
+        },
+        {
+          "index":5,
+          "data":"ashConcentration",
+          "value":0.0,
+          "title":"预热器出口废气中飞灰浓度",
+          "latexItem":"$K_{fh}$"
+        },
+        {
+          "index":6,
+          "data":"ashSpecificHeat",
+          "value":0.0,
+          "title":"预热器出口飞灰的比热",
+          "latexItem":"$c_{fh}$"
+        },
+        {
+          "index":7,
+          "data":"averageWasterGasSpecificHeat",
+          "value":0.0,
+          "title":"废气的平均定压比热",
+          "latexItem":"$c_{pf}$"
+        },
+        {
+          "index":8,
+          "data":"wasterGasTemperature",
+          "value":0.0,
+          "title":"预热器出口的废气温度",
+          "latexItem":"$t_f$"
+        },
+        {
+          "index":9,
+          "data":"wasterGasTemperaturePH",
+          "value":0.0,
+          "title":"PH锅炉出口废气的温度",
+          "latexItem":"$t_{pf}$"
+        },
+        {
+          "index":10,
+          "data":"liquidWaterTemperature",
+          "value":0.0,
+          "title":"进入PH锅炉液态水的温度",
+          "latexItem":"$t_{Pw}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
+        },
+        {
+          "index": 2,
+          "data": "carbonDioxideVolumeFraction",
+          "value": 0.1,
+          "title": "二氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}_2^f$"
+        },
+        {
+          "index": 3,
+          "data": "waterVaporVolumeFraction",
+          "value": 0.1,
+          "title": "水蒸气气体体积分数",
+          "latexItem": "$\\mathrm{H_2O}^f$"
+        },
+        {
+          "index": 4,
+          "data": "oxygenVolumeFraction",
+          "value": 0.2,
+          "title": "氧气体体积分数",
+          "latexItem": "$\\mathrm{O}_2^f$"
+        },
+        {
+          "index": 5,
+          "data": "nitrogenVolumeFraction",
+          "value": 0.2,
+          "title": "氮气体体积分数",
+          "latexItem": "$\\mathrm{N}_2^f$"
+        },
+        {
+          "index": 6,
+          "data": "carbonMonoxideDensity",
+          "value": 1.14,
+          "title": "常压下一氧化碳的气体密度",
+          "latexItem": "$\\rho_{\\mathrm{CO}}$"
+        },
+        {
+          "index": 7,
+          "data": "carbonDioxideDensity",
+          "value": 1.98,
+          "title": "常压下二氧化碳的气体密度",
+          "latexItem": "$\\rho_{\\mathrm{CO}}$"
+        },
+        {
+          "index": 8,
+          "data": "waterVaporDensity",
+          "value": 0.6,
+          "title": "常压下水蒸气的气体密度",
+          "latexItem": "$\\rho_{\\mathrm{H_2O}}$"
+        },
+        {
+          "index": 9,
+          "data": "oxygenDensity",
+          "value": 1.429,
+          "title": "常压下氧气的气体密度",
+          "latexItem": "$\\rho_{\\mathrm{O_2}}$"
+        },
+        {
+          "index": 10,
+          "data": "nitrogenDensity",
+          "value": 0.81,
+          "title": "常压下氮气的气体密度",
+          "latexItem": "$\\rho_{\\mathrm{N_2}}$"
+        },
+        {
+          "index": 11,
+          "data": "nitrogenDensity",
+          "value": 1,
+          "title": "常压下液态水的密度",
+          "latexItem": "$\\rho_{\\mathrm{w}}$"
+        },
+        {
+          "index": 12,
+          "data": "carbonMonoxideSpecificHeat",
+          "value": 1040,
+          "title": "一氧化碳的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{CO}}^f$"
+        },
+        {
+          "index": 13,
+          "data": "carbonDioxideSpecificHeat",
+          "value": 840,
+          "title": "二氧化碳的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{CO_2}}^f$"
+        },
+        {
+          "index": 14,
+          "data": "waterVaporSpecificHeat",
+          "value": 1850,
+          "title": "水蒸气的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{H}_2 \\mathrm{O}}^f$"
+        },
+        {
+          "index": 15,
+          "data": "oxygenSpecificHeat",
+          "value": 918,
+          "title": "氧气的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{O}_2}^f$"
+        },
+        {
+          "index": 16,
+          "data": "nitrogenSpecificHeat",
+          "value": 1040,
+          "title": "氮气的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{N}_2}^f$"
+        },
+        {
+          "index": 17,
+          "data": "liquidWaterSpecificHeat",
+          "value": 4200,
+          "title": "液态水的比热",
+          "latexItem": "$\\mathbf{c}_{\\mathrm{w}}$"
+        }
+      ]
+    }
+  ],
+  "menuList": [
+    {
+      "index": 1,
+      "icon": "Edit",
+      "title": "PH锅炉"
+    },
+    {
+      "index": 2,
+      "icon": "Coffee",
+      "title": "悬浮预热器"
+    },
+    {
+      "index": 3,
+      "icon": "SwitchFilled",
+      "title": "分解炉"
+    },
+    {
+      "index": 4,
+      "icon": "Help",
+      "title": "回转窑"
+    },
+    {
+      "index": 5,
+      "icon": "IceTea",
+      "title": "冷却机"
+    },
+    {
+      "index": 6,
+      "icon": "Dish",
+      "title": "AQC锅炉"
+    }
+  ]
+}
