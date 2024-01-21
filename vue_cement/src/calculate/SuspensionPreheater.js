@@ -21,6 +21,7 @@ const waterVaporSpecificHeat = 1850;
 const oxygenSpecificHeat = 918;
 const nitrogenSpecificHeat = 1040;
 const liquidWaterSpecificHeat = 4200;
+const standardAirSpecificHeat = 1.004;
 // 温度常量
 const waterVaporTemperature = 100;
 // 流程执行函数
@@ -66,21 +67,84 @@ function cal_total_energyStream_enteringNode(){
 
 }
 // 2-1.进入的生料量的显热
-function cal_rawMaterial_sensible_enteringNode(){
-
+function cal_rawMaterial_sensible_enteringNode(rawMaterialTemperature, rawMaterialWaterContent){
+    // rawMaterialTemperature : 生料的温度
+    let rawMaterialSensible = (0.88 + 2.93e4 * rawMaterialTemperature) + 4.1816 * (rawMaterialWaterContent / (100 - rawMaterialWaterContent));
+    return rawMaterialSensible;
 }
 // 2-2.进入的空气显热（生料代入的空气）
-function cal_air_sensible_enteringNode(){
-
+function cal_air_sensible_enteringNode(hourlyAirVolume, hourlyClinkerProduction, rawMaterialTemperature){
+    let airSensible = hourlyAirVolume / hourlyClinkerProduction * standardAirSpecificHeat * rawMaterialTemperature;
+    return airSensible;
 }
 // 2-3.来自分解炉的废气显热
-function cal_wasterGas_sensible_enteringNode(){
+function cal_wasterGas_sensible_enteringNode(hourlyWasterGasVolume, hourlyClinkerProduction, wasterTemperature){
+    let wasterGasSpecificHeat = (
+        (carbonMonoxideVolumeFraction * carbonMonoxideSpecificHeat) +
+        (carbonDioxideVolumeFraction * carbonDioxideSpecificHeat) +
+        (waterVaporVolumeFraction * waterVaporSpecificHeat) +
+        (oxygenVolumeFraction * oxygenSpecificHeat) +
+        (nitrogenVolumeFraction * nitrogenSpecificHeat) +
+        (liquidWaterVolumeFraction * liquidWaterSpecificHeat)) / 100;
 
+    let wasterGasSensible = hourlyWasterGasVolume / hourlyClinkerProduction * wasterGasSpecificHeat * wasterTemperature;
+    return wasterGasSensible;
 }
-// 1-4.来自分解炉的飞灰显热
-function cal_Ash_sensible_enteringNode(){
-
+// 2-4.来自分解炉的飞灰显热
+function cal_Ash_sensible_enteringNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction, ashSpecificHeat, wasterTemperature){
+    let ashMassStream = cal_Ash_massStream_enteringNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction);
+    let ashSensible = ashMassStream * ashSpecificHeat * wasterTemperature;
 }
 // 3.离开悬浮预热器的物质总和
+function cal_total_massStream_leavingNode(){
 
+}
+// 3-1.出口的生料
+function cal_rawMaterial_massStream_leavingNode(hourlyRawMaterialC5, hourlyClinkerProduction){
+    // hourlyRawMaterialC5 : 每小时从C5出口的生料
+    let rawMaterialMassStream = hourlyRawMaterialC5 / hourlyClinkerProduction;
+    return rawMaterialMassStream;
+}
+// 3-2.出口的废气
+function cal_wasterGas_massStream_leavingNode(hourlyWasterGasVolume, hourlyClinkerProduction){
+    let wasterGasMassStream = cal_wasterGas_massStream_enteringNode(hourlyWasterGasVolume, hourlyClinkerProduction);
+    return wasterGasMassStream;
+}
+// 3-3.出口的飞灰
+function cal_ash_massStream_leavingNode(){
+    let ashMassStream = cal_Ash_massStream_enteringNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction);
+    return ashMassStream;
+}
 // 4.离开悬浮预热器的能量总和
+function cal_total_sensible_leavingNode(
+    hourlyRawMaterialC5, hourlyClinkerProduction, hourlyWasteGasVolume, hourlyRawMaterial, rawMaterialSpecificHeatC5, rawMaterialTemperatureC5){
+    let rawMaterialSensible = cal_rawMaterial_sensible_leavingNode(hourlyRawMaterialC5, hourlyClinkerProduction, rawMaterialSpecificHeatC5, rawMaterialTemperatureC5);
+    let wasterGasSensible = cal_wasterGas_sensible_leavingNode(hourlyWasteGasVolume, hourlyClinkerProduction, averageWasterGasSpecificHeat, wasterGasTemperaturePH);
+    let ashSensible = cal_Ash_sensible_leavingNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction, ashSpecificHeat, wasterGasTemperaturePH);
+    let waterVaporSensible = cal_waterVapor_sensible_leavingNode(hourlyRawMaterial, hourlyClinkerProduction, rawMaterialWaterContent, heatOfVaporization);
+}ooopp
+// 4-1. 离开的生料显热
+function cal_rawMaterial_sensible_leavingNode(hourlyRawMaterialC5, hourlyClinkerProduction, rawMaterialSpecificHeatC5, rawMaterialTemperatureC5){
+    let rawMaterialMassStream = cal_rawMaterial_massStream_leavingNode(hourlyRawMaterialC5, hourlyClinkerProduction);
+    let rawMaterialSensible = rawMaterialMassStream * rawMaterialSpecificHeatC5 * rawMaterialTemperatureC5;
+    return rawMaterialSensible;
+}
+// 4-2. 废气
+function cal_wasterGas_sensible_leavingNode(hourlyWasteGasVolume, hourlyClinkerProduction, averageWasterGasSpecificHeat, wasterGasTemperaturePH){
+    let wasterGasSensible;
+    wasterGasSensible = hourlyWasteGasVolume * averageWasterGasSpecificHeat * wasterGasTemperaturePH / hourlyClinkerProduction;
+    return wasterGasSensible;
+}
+// 4-3. 飞灰
+function cal_Ash_sensible_leavingNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction, ashSpecificHeat, wasterGasTemperaturePH){
+    let ashMassStream = cal_Ash_massStream_enteringNode(ashConcentration, hourlyWasteGasVolume, hourlyClinkerProduction);
+    let ashSensible = ashMassStream * ashSpecificHeat * wasterGasTemperaturePH;
+    return ashSensible;
+}
+// 4-4. 水蒸气
+function cal_waterVapor_sensible_leavingNode(hourlyRawMaterial, hourlyClinkerProduction, rawMaterialWaterContent, heatOfVaporization){
+    let rawMaterialMassStream = cal_rawMaterial_massStream_enteringNode(hourlyRawMaterial, hourlyClinkerProduction)
+    let waterVaporSensible = rawMaterialMassStream * (rawMaterialWaterContent / 100) * heatOfVaporization
+    // heatOfVaporization : 水的气化热
+    return waterVaporSensible;
+}

@@ -26,3 +26,31 @@ const waterVaporTemperature = 100;
 export function fun4(){
 
 }
+// 1.进入冷却炉的物质流
+function cal_total_massStream_enteringNode(){
+
+}
+function cal__massStream_enteringNode(){
+
+}
+// 2.进入冷却炉的能量流
+function cal_total_energyStream_enteringNode(){
+
+}
+function cal__sensible_enteringNode(){
+
+}
+// 3.离开冷却炉的物质流
+function cal_total_massStream_leavingNode(){
+
+}
+function cal__massStream_leavingNode(){
+
+}
+// 4.离开冷却炉的能量流
+function cal_total_energyStream_leavingNode(){
+
+}
+function cal__sensible_leavingNode(){
+
+}
