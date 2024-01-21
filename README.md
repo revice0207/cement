@@ -340,3 +340,8 @@ backend: flask_cement
 4.实现公式计算
 
 5.实现计算结果反馈到图表中
+
+### latex公式
+```latex
+
+```
