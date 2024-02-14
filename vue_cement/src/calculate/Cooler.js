@@ -51,6 +51,8 @@ const nitrogenSpecificHeatWasterGas = 1040;
 const coalPowderSpecificHeat = 1000;
 const wasterGasSpecificHeat = 1100;
 const ashSpecificHeat = 1200;
+// 熟料的比热
+const clinkerSpecificHeat = 1200;
 //---------------------------------------------------------------------------------------------
 // 温度常量
 const waterVaporTemperature = 100;
@@ -61,149 +63,88 @@ export function fun2(){
 
 }
 
-function cal_total_massStream_enteringNode(){
+function cal_total_massStream_enteringNode(hourlyAirVolume, hourlyClinkerProduction){
+    let clinkerMassStream =  cal_clinker_massStream_enteringNode()
+    let airMassStream = cal_air_massStream_enteringNode(hourlyAirVolume, hourlyClinkerProduction)
+    let totalEnteringMassStream = clinkerMassStream + airMassStream;
+    return totalEnteringMassStream;
+}
+// 1-1: 熟料进入的物质流
+function cal_clinker_massStream_enteringNode(){
+    let clinkerMassStream = 1;
+    return clinkerMassStream;
+}
+// 1-2: 冷却空气的物质流
+function cal_air_massStream_enteringNode(hourlyAirVolume, hourlyClinkerProduction){
+    let airMassStream = hourlyAirVolume * standardAirDensity / hourlyClinkerProduction;
+    return airMassStream;
+}
+
+function cal_total_sensible_enteringNode(){
 
 }
-// 1-1:煤粉进入的物质流
-function cal_coalPowder_massStream_enteringNode(hourlyCoalPowder, hourlyClinkerProduction){
-    let coalPowderMassStream = hourlyCoalPowder / hourlyClinkerProduction;
-    return coalPowderMassStream;
+// 2-1: 高温水泥熟料的显热
+function cal_clinker_sensible_enteringNode(clinkerTemperature){
+    let clinkerSensible = clinkerSpecificHeat * clinkerTemperature;
+    return clinkerSensible
 }
-// 1-2:一次空气的物质流
-function cal_firstAir_massStream_enteringNode(hourlyFirstAirVolume, hourlyClinkerProduction){
-    let firstAirDensity = (
-        carbonMonoxideDensity * carbonMonoxideVolumeFractionFirst +
-        carbonDioxideDensity * carbonDioxideVolumeFractionFirst+
-        waterVaporDensity * waterVaporVolumeFractionFirst +
-        oxygenDensity * oxygenVolumeFractionFirst +
-        nitrogenDensity * nitrogenVolumeFractionFirst
-    ) / 100;
-
-    let firstAirMassStream = hourlyFirstAirVolume * firstAirDensity / hourlyClinkerProduction;
-    return firstAirMassStream;
-}
-// 1-3:三次空气的物质流
-function cal_thirdAir_massStream_enteringNode(hourlyThirdAirVolume, hourlyClinkerProduction){
-    let thirdAirDensity = (
-        carbonMonoxideDensity * carbonMonoxideVolumeFractionThird +
-        carbonDioxideDensity * carbonDioxideVolumeFractionThird+
-        waterVaporDensity * waterVaporVolumeFractionThird +
-        oxygenDensity * oxygenVolumeFractionThird +
-        nitrogenDensity * nitrogenVolumeFractionThird
-    ) / 100;
-
-    let thirdAirMassStream = hourlyThirdAirVolume * thirdAirDensity / hourlyClinkerProduction;
-    return thirdAirMassStream;
-}
-// 1-4:出口生料的物质流
-function cal_rawMaterial_massStream_enteringNode(hourlyRawMaterial, hourlyClinkerProduction){
-    let rawMaterialMassStream = hourlyRawMaterial / hourlyClinkerProduction;
-    return rawMaterialMassStream;
-}
-// 1-5:漏风的物质流
-function cal_leakage_massStream_enteringNode(hourlyLeakageVolume, hourlyClinkerProduction){
-    // 使用标准空气的密度
-    let leakageMassStream = hourlyLeakageVolume * standardAirDensity / hourlyClinkerProduction;
-    return leakageMassStream;
-}
-// 1-6:窑尾的废气的物质流
-function cal_wasterGas_massStream_enteringNode(hourlyWasterGasVolume, hourlyClinkerProduction){
-    let wasterGasDensity = (
-        carbonMonoxideDensity * carbonMonoxideVolumeFractionWasterGas +
-        carbonDioxideDensity * carbonDioxideVolumeFractionWasterGas+
-        waterVaporDensity * waterVaporVolumeFractionWasterGas +
-        oxygenDensity * oxygenVolumeFractionWasterGas +
-        nitrogenDensity * nitrogenVolumeFractionWasterGas
-    ) / 100;
-
-    let wasterGasMassStream = hourlyWasterGasVolume * wasterGasDensity / hourlyClinkerProduction;
-    return wasterGasMassStream
-}
-// 1-7:窑尾的飞灰的物质流
-function cal_ash_massStream_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity){
-    let ashMassStream = hourlyAshVolume * ashDensity / hourlyClinkerProduction;
-    return ashMassStream;
-}
-// 2.进入冷却炉的能量流
-function cal_total_energyStream_enteringNode(){
+// 2-2: 冷却空气的显热
+function cal_air_sensible_enteringNode(hourlyAirVolume, hourlyClinkerProduction, ){
 
 }
-// 2-1
-function cal_coalPowder_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, coalPowderTemperature){
-    let coalPowderMassStream = cal_coalPowder_massStream_enteringNode(hourlyCoalPowder, hourlyClinkerProduction);
-    let coalPowderSensible = coalPowderMassStream * coalPowderSpecificHeat * coalPowderTemperature;
-    return coalPowderSensible;
-}
-// 2-2
-function cal_firstAir_sensible_enteringNode(hourlyFirstAirVolume, hourlyClinkerProduction, firstAirTemperature){
-    let firstAirSpecificHeat = (
-        (carbonMonoxideVolumeFractionFirst * carbonMonoxideSpecificHeatFirst) +
-        (carbonDioxideVolumeFractionFirst * carbonDioxideSpecificHeatFirst) +
-        (waterVaporVolumeFractionFirst * waterVaporSpecificHeatFirst) +
-        (oxygenVolumeFractionFirst * oxygenSpecificHeatFirst) +
-        (nitrogenVolumeFractionFirst * nitrogenSpecificHeatFirst)) / 100;
 
-    let firstAirSensible = hourlyFirstAirVolume * firstAirSpecificHeat * firstAirTemperature / hourlyClinkerProduction;
-    return firstAirSensible;
-}
-// 2-3
-function cal_thirdAir_sensible_enteringNode(hourlyThirdAirVolume, hourlyClinkerProduction, thirdAirTemperature){
-    let thirdAirSpecificHeat = (
-        (carbonMonoxideVolumeFractionThird * carbonMonoxideSpecificHeatThird) +
-        (carbonDioxideVolumeFractionThird * carbonDioxideSpecificHeatThird) +
-        (waterVaporVolumeFractionThird * waterVaporSpecificHeatThird) +
-        (oxygenVolumeFractionThird * oxygenSpecificHeatThird) +
-        (nitrogenVolumeFractionThird * nitrogenSpecificHeatThird)) / 100;
-
-    let thirdAirSensible = hourlyThirdAirVolume * thirdAirSpecificHeat * thirdAirTemperature / hourlyClinkerProduction;
-    return thirdAirSensible;
-}
-// 2-4
-function cal_rawMaterial_sensible_enteringNode(rawMaterialTemperature, rawMaterialWaterContent){
-    // rawMaterialTemperature : 生料的温度
-    let rawMaterialSensible = (0.88 + 2.93e4 * rawMaterialTemperature) + 4.1816 * (rawMaterialWaterContent / (100 - rawMaterialWaterContent));
-    return rawMaterialSensible;
-}
-// 2-5:漏风显热
-function cal_leakage_sensible_enteringNode(){
-
-}
-// 2-6
-function cal_coalPowderBurning_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, coalHeatingValue){
-    // coalHeatingValue: 人分解炉煤粉收到基低位发热量
-    let coalPowderMassStream = cal_coalPowder_massStream_enteringNode(hourlyCoalPowder, hourlyClinkerProduction)
-    let coalPowderBurningSensible = coalPowderMassStream * coalHeatingValue;
-    return coalPowderBurningSensible;
-}
-// 2-7
-function cal_wasterGas_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, wasterGasTemperature){
-    let wasterGasSpecificHeat = (
-        (carbonMonoxideVolumeFractionWasterGas * carbonMonoxideSpecificHeatWasterGas) +
-        (carbonDioxideVolumeFractionWasterGas * carbonDioxideSpecificHeatWasterGas) +
-        (waterVaporVolumeFractionWasterGas * waterVaporSpecificHeatWasterGas) +
-        (oxygenVolumeFractionWasterGas * oxygenSpecificHeatWasterGas) +
-        (nitrogenVolumeFractionWasterGas * nitrogenSpecificHeatWasterGas)) / 100;
-
-    let wasterGasSensible = hourlyAshVolume * wasterGasSpecificHeat * wasterGasTemperature / hourlyClinkerProduction;
-    return wasterGasSensible;
-}
-// 2-8
-function cal_ash_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashTemperature){
-    let ashMassStream = cal_ash_massStream_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity);
-    let ashSensible = ashMassStream * ashSpecificHeat * ashTemperature;
-    return ashSensible;
-}
-// 3.离开冷却炉的物质流
 function cal_total_massStream_leavingNode(){
 
 }
-function cal__massStream_leavingNode(){
+// 3-1: 低温水泥熟料的物质流
+function cal_clinker_massStream_leavingNode(){
 
 }
-// 4.离开冷却炉的能量流
-function cal_total_energyStream_leavingNode(){
+// 3-2: 飞灰的物质流
+function cal_ash_massStream_leavingNode(){
 
 }
-function cal__sensible_leavingNode(){
+// 3-3: 冷却空气的物质流
+function cal_air_massStream_leavingNode(){
+
+}
+// 3-4: 二次空气
+function cal_secondAir_massStream_leavingNode(){
+
+}
+// 3-5: 三次空气
+function cal_thirdAir_massStream_leavingNode(){
+
+}
+// 3-6: AQC空气
+function cal_AQCAir_massStream_leavingNode(){
+
+}
+
+function cal_total_sensible_leavingNode(){
+
+}
+// 4-1: 低温水泥显热
+function cal_clinker_sensible_leavingNode(){
+
+}
+// 4-2: 飞灰显热
+function cal_ash_sensible_leavingNode(){
+
+}
+// 4-3: 冷却机空气显热
+function cal_air_sensible_leavingNode(){
+
+}
+// 4-4: 二次空气显热
+function cal_secondAir_sensible_leavingNode(){
+
+}
+// 4-5: 三次空气显热
+function cal_thirdAir_sensible_leavingNode(){
+
+}
+// 4-6: AQC空气显热
+function cal_AQCAir_sensible_leavingNode(){
 
 }
