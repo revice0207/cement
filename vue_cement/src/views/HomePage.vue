@@ -55,7 +55,7 @@
           :collapse-transition="false"
           class="menu_list"
         >
-          <el-menu-item v-for="(item, index) in menuList" :key="index" @click="changeModel(item.title)">
+          <el-menu-item v-for="(item, index) in menuList" :key="index" @click="changeModel(item.title, index)">
             <el-icon><component :is="item.icon" /></el-icon>
             <template #title>{{ item.title }}</template>
           </el-menu-item>
@@ -189,7 +189,8 @@ import * as echarts from 'echarts'
 import katex from 'katex'
 import MarkdownIt from 'markdown-it'
 import cement_data from '@/data/cement_data.json'
-import {fun1} from '@/calculate/PH_Boilder';
+//import {fun1} from '@/calculate/PH_Boilder';
+import {fun2} from '@/calculate/SuspensionPreheater';
 import * as XLSX from 'xlsx';
 export default {
   name: "HomePage",
@@ -214,8 +215,13 @@ export default {
   },
   methods:{
     // 切换菜单
-    changeModel(title){
+    changeModel(title, index){
       this.title = title
+      console.log(index)
+      this.inputList = JSON.parse(JSON.stringify(cement_data)).data[index].inputList
+      this.paramList = JSON.parse(JSON.stringify(cement_data)).data[index].paramList
+      this.markDownText = JSON.parse(JSON.stringify(cement_data)).data[index].markDownText
+      this.latexList = JSON.parse(JSON.stringify(cement_data)).data[index].latexList
     },
     // 处理上传文件
     async handleUpload(){
@@ -359,7 +365,9 @@ export default {
           this.inputList.forEach((item)=>{
             params.push(item.value)
           })
-          let result = fun1(...params)
+          //let result = fun1(...params)
+          let result = fun2(...params)
+          console.log(result)
           this.createChart(this.$refs.pieChart1, result[0])
           this.createChart(this.$refs.pieChart2, result[1])
           this.createChart(this.$refs.pieChart3, (1 - result[1]))

@@ -2,7 +2,7 @@
   "data": [
     {
       "index": 1,
-      "name": "HP_boiler",
+      "name": "PH_Boiler",
       "menu_title": "PH锅炉",
       "latexList": [
         {
@@ -245,6 +245,837 @@
           "value": 4200,
           "title": "液态水的比热",
           "latexItem": "$\\mathbf{c}_{\\mathrm{w}}$"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "SuspensionPreheater",
+      "menu_title": "悬浮预热器",
+      "markDownText": "",
+      "latexList": [
+        {
+          "latexItem": "$$ m_s=\\frac{M_s}{M_{s h}} $$",
+          "latexContent": "进入的生料量"
+        },
+        {
+          "latexItem": "$$ m_{s k}=\\frac{V_{s k}}{M_{s h}} \\times \\rho_k $$",
+          "latexContent": "生料带入的空气"
+        },
+        {
+          "latexItem": "$$ \\rho_{\\mathrm{Ff}}=\\frac{\\mathrm{CO}_2^{\\mathrm{Ff}} \\times \\rho_{\\mathrm{CO}_2}+\\mathrm{CO}^{\\mathrm{Ff}} \\times \\rho_{\\mathrm{CO}}+\\mathrm{O}_2^{\\mathrm{Ff}} \\times \\rho_{\\mathrm{O}_2}+\\mathrm{N}_2^{\\mathrm{Ff}} \\times \\rho_{\\mathrm{N}_2}+\\mathrm{H}_2 \\mathrm{O}^{\\mathrm{Ff}} \\times \\rho_{\\mathrm{H}_2 \\mathrm{O}}}{100} $$",
+          "latexContent": "分解炉产生废气的密度"
+        },
+        {
+          "latexItem": "$$ m_{F f}=\\frac{V_{F f}}{M_{s h}} \\times \\rho_{F f} $$",
+          "latexContent": "每千克熟料分解炉产生的烟气量"
+        },
+        {
+          "latexItem": "$$ m_{F f h}=\\frac{V_{F f}}{M_{s h}} \\times K_{F f h} $$",
+          "latexContent": "每千克熟料分解炉排出的飞灰量"
+        },
+        {
+          "latexItem": "$$ \\sum m_X^{i n}=m_s+m_{s k}+m_{F f}+m_{F f h} $$",
+          "latexContent": "进入节点的物质总和"
+        },
+        {
+          "latexItem": "$$ Q_s=m_s \\times c_s \\times t_s $$",
+          "latexContent": "生料显热"
+        },
+        {
+          "latexItem": "$$ c_s=\\left(0.88+2.93 \\times 10^{-4} \\times t_s\\right)+4.1816 \\times \\frac{w^s}{100-w^s} $$",
+          "latexContent": "生料的比热"
+        },
+        {
+          "latexItem": "$$ Q_{s k}=\\frac{V_{s k}}{M_{s h}} \\times c_k \\times t_s $$",
+          "latexContent": "生料带入的空气显热"
+        },
+        {
+          "latexItem": "$$ Q_{F f}=\\frac{V_{F f}}{M_{s h}} \\times c_{F f} \\times t_{F f} $$",
+          "latexContent": "废气显热"
+        },
+        {
+          "latexItem": "$$  $$",
+          "latexContent": ""
+        },
+        {
+          "latexItem": "$$  $$",
+          "latexContent": ""
+        },
+        {
+          "latexItem": "$$  $$",
+          "latexContent": ""
+        },
+        {
+          "latexItem": "$$  $$",
+          "latexContent": ""
+        }
+      ],
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyRawMaterial",
+          "value":0.0,
+          "title":"每小时生料喂料量",
+          "latexItem":"$M_s$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyAirVolume",
+          "value":0.0,
+          "title":"每小时生料带入空气体积",
+          "latexItem":"$V_{sk}$"
+        },
+        {
+          "index":4,
+          "data":"hourlyWasterGasVolume",
+          "value":0.0,
+          "title":"每小时分解炉产生烟气体积",
+          "latexItem":"$V_{Ff}$"
+        },
+        {
+          "index":5,
+          "data":"ashConcentration",
+          "value":0.0,
+          "title":"分解炉排出烟气中飞灰的浓度",
+          "latexItem":"$K_{Ffh}$"
+        },
+        {
+          "index":6,
+          "data":"hourlyRawMaterialC5",
+          "value":0.0,
+          "title":"每小时从C5出口离开的生料量",
+          "latexItem":"$M_{C5s}$"
+        },
+        {
+          "index":7,
+          "data":"rawMaterialTemperature",
+          "value":0.0,
+          "title":"生料的温度",
+          "latexItem":"$M_{C5s}$"
+        },
+        {
+          "index":8,
+          "data":"rawMaterialTemperatureC5",
+          "value":0.0,
+          "title":"每小时从C5出口离开的生料量",
+          "latexItem":"$M_{C5s}$"
+        },
+        {
+          "index":9,
+          "data":"wasterTemperature",
+          "value":0.0,
+          "title":"分解炉出口废气的温度",
+          "latexItem":"$t_{Ff}$"
+        },
+        {
+          "index":10,
+          "data":"rawMaterialSpecificHeatC5",
+          "value":0.0,
+          "title":"生料出口的比热",
+          "latexItem":"$w^s$"
+        },
+        {
+          "index":11,
+          "data":"rawMaterialWaterContent",
+          "value":0.0,
+          "title":"生料的水分",
+          "latexItem":"$w^s$"
+        },
+        {
+          "index":12,
+          "data":"ashSpecificHeat",
+          "value":0.0,
+          "title":"来自分解炉的飞灰比热",
+          "latexItem":"$C_{Ffh}$"
+        },
+        {
+          "index":13,
+          "data":"wasterGasTemperaturePH",
+          "value":0.0,
+          "title":"进入PH锅炉液态水的温度",
+          "latexItem":"$t_{PW}$"
+        },
+        {
+          "index":14,
+          "data":"heatOfVaporization",
+          "value":0.0,
+          "title":"水的气化热",
+          "latexItem":"$q_{qh}$"
+        },
+        {
+          "index":15,
+          "data":"averageWasterGasSpecificHeat",
+          "value":0.0,
+          "title":"废气的平均定压比热",
+          "latexItem":"$C_{Pf}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "StratifiedFurnace",
+      "menu_title": "分解炉",
+      "latexList": [
+        {
+          "latexItem": "$$  $$",
+          "latexContent": ""
+        }
+      ],
+      "markDownText": "",
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyCoalPowder",
+          "value":0.0,
+          "title":"每千克熟料进入分解炉煤粉的量",
+          "latexItem":"$M_{Fr}$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyFirstAirVolume",
+          "value":0.0,
+          "title":"每小时进入分解炉一次空气体积",
+          "latexItem":"$V_{F1k}$"
+        },
+        {
+          "index":4,
+          "data":"hourlyThirdAirVolume",
+          "value":0.0,
+          "title":"每小时进入分解炉三次空气体积",
+          "latexItem":"$V_{3k}$"
+        },
+        {
+          "index":5,
+          "data":"hourlyRawMaterial",
+          "value":0.0,
+          "title":"每小时生料喂料量",
+          "latexItem":"$M_s$"
+        },
+        {
+          "index":6,
+          "data":"hourlyLeakageVolume",
+          "value":0.0,
+          "title":"每小时漏入分解炉的空气体积",
+          "latexItem":"$V_{Fl0k}$"
+        },
+        {
+          "index":7,
+          "data":"hourlyWasterGasVolume",
+          "value":0.0,
+          "title":"每小时进入分解炉的窑尾废气体积",
+          "latexItem":"$V_{Yf}$"
+        },
+        {
+          "index":8,
+          "data":"hourlyAshVolume",
+          "value":0.0,
+          "title":"每小时飞灰的体积",
+          "latexItem":"$V_{Yf}$"
+        },
+        {
+          "index":9,
+          "data":"coalPowderTemperature",
+          "value":0.0,
+          "title":"煤粉的温度",
+          "latexItem":"$t_r$"
+        },
+        {
+          "index":10,
+          "data":"firstAirTemperature",
+          "value":0.0,
+          "title":"进入分解炉的一次空气的温度",
+          "latexItem":"$t_{F1k}$"
+        },
+        {
+          "index":11,
+          "data":"thirdAirTemperature",
+          "value":0.0,
+          "title":"进入分解炉的 三次空气的温度",
+          "latexItem":"$t_{F3k}$"
+        },
+        {
+          "index":12,
+          "data":"airTemperature",
+          "value":0.0,
+          "title":"漏风显热环境的温度",
+          "latexItem":"$t_k$"
+        },
+        {
+          "index":13,
+          "data":"wasterGasTemperature",
+          "value":0.0,
+          "title":"窑尾废气的温度",
+          "latexItem":"$t_{Yf}$"
+        },
+        {
+          "index":14,
+          "data":"rawMaterialTemperature",
+          "value":0.0,
+          "title":"生料的温度",
+          "latexItem":"$M_{C5s}$"
+        },
+        {
+          "index":15,
+          "data":"waterContent",
+          "value":0.0,
+          "title":"生料中化合水含量",
+          "latexItem":"$H_2O^s$"
+        },
+        {
+          "index":16,
+          "data":"magnesiumOxideContent",
+          "value":0.0,
+          "title":"生料中MgO的含量",
+          "latexItem":"$MgO^s$"
+        },
+        {
+          "index":17,
+          "data":"calciumOxideContent",
+          "value":0.0,
+          "title":"生料中CaO的含量",
+          "latexItem":"$CaO^s$"
+        },
+        {
+          "index":18,
+          "data":"rawMaterialWaterContent",
+          "value":0.0,
+          "title":"生料的水分",
+          "latexItem":"$w^s$"
+        },
+        {
+          "index":19,
+          "data":"ashLoss",
+          "value":0.0,
+          "title":"飞灰的烧失量",
+          "latexItem":"L_fh$"
+        },
+        {
+          "index":20,
+          "data":"rawMaterialLoss",
+          "value":0.0,
+          "title":"生料的烧失量",
+          "latexItem":"$L_s$"
+        },
+        {
+          "index":21,
+          "data":"ashDensity",
+          "value":0.0,
+          "title":"窑尾废气中飞灰的浓度",
+          "latexItem":"$K_{Yfh}$"
+        },
+        {
+          "index":22,
+          "data":"coalHeatingValue",
+          "value":0.0,
+          "title":"分解炉煤粉收到基低位发热量",
+          "latexItem":"$Q_{net,ar}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "RotaryKiln",
+      "menu_title": "回转窑",
+      "latexList": [
+        {
+          "latexItem": "$$ \\rho_f=\\frac{C O_2^f \\times \\rho_{C O_2}+C O^f \\times \\rho_{C O}+O_2^f \\times \\rho_{O_2}+N_2^f \\times \\rho_{N_2}+H_2 O^f \\times \\rho_{H_2 O}}{100}\n $$",
+          "latexContent": "预热器废气计算公式"
+        }
+      ],
+      "markDownText": "",
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyCoalPowder",
+          "value":0.0,
+          "title":"每千克熟料进入回转窑的煤粉量",
+          "latexItem":"$M_{Yr}$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyFirstAirVolume",
+          "value":0.0,
+          "title":"每小时进入回转窑一次空气的体积",
+          "latexItem":"$V_{Y1k}$"
+        },{
+          "index":4,
+          "data":"hourlySecondAirVolume",
+          "value":0.0,
+          "title":"每小时进入回转窑的二次空气的体积",
+          "latexItem":"$V_{2k}$"
+        },
+        {
+          "index":5,
+          "data":"hourlyLeakageVolume",
+          "value":0.0,
+          "title":"每小时漏入回转窑的空气体积",
+          "latexItem":"$V_{Yl0k}$"
+        },
+        {
+          "index":6,
+          "data":"hourlyRawMaterial",
+          "value":0.0,
+          "title":"每小时生料喂料量",
+          "latexItem":"$M_s$"
+        },
+        {
+          "index":7,
+          "data":"hourlyWasterGasVolume",
+          "value":0.0,
+          "title":"每小时进入分解炉的窑尾废气体积",
+          "latexItem":"$V_{Yf}$"
+        },
+        {
+          "index":8,
+          "data":"hourlyAshVolume",
+          "value":0.0,
+          "title":"每小时飞灰的体积",
+          "latexItem":"$V_{Yf}$"
+        },
+        {
+          "index":9,
+          "data":"ashDensity",
+          "value":0.0,
+          "title":"窑尾废气中飞灰的浓度",
+          "latexItem":"$K_{Yfh}$"
+        },
+        {
+          "index":10,
+          "data":"rawMaterialLoss",
+          "value":0.0,
+          "title":"生料的烧失量",
+          "latexItem":"$L_s$"
+        },
+        {
+          "index":11,
+          "data":"coalPowderTemperature",
+          "value":0.0,
+          "title":"煤粉的温度",
+          "latexItem":"$t_r$"
+        },
+        {
+          "index": 12,
+          "data": "firstAirTemperature",
+          "value": 0.0,
+          "title": "进入回转窑一次空气的温度",
+          "latexItem": "$t_{Y1k}$"
+        },
+        {
+          "index":13,
+          "data":"secondAirTemperature",
+          "value":0.0,
+          "title":"二次空气进入回转窑的温度",
+          "latexItem":"$t_{2k}$"
+        },
+        {
+          "index":14,
+          "data":"airTemperature",
+          "value":0.0,
+          "title":"回转窑的空气温度",
+          "latexItem":"$t_k$"
+        },
+        {
+          "index":15,
+          "data":"rawMaterialTemperature",
+          "value":0.0,
+          "title":"生料的温度",
+          "latexItem":"$M_{C5s}$"
+        },
+        {
+          "index":16,
+          "data":"coalHeatingValue",
+          "value":0.0,
+          "title":"分解炉煤粉收到基低位发热量",
+          "latexItem":"$Q_{net,ar}$"
+        },
+        {
+          "index":17,
+          "data":"rawMaterialWaterContent",
+          "value":0.0,
+          "title":"生料的水分",
+          "latexItem":"$w^s$"
+        },
+        {
+          "index":18,
+          "data":"wasterGasTemperature",
+          "value":0.0,
+          "title":"窑尾废气的温度",
+          "latexItem":"$t_{Yf}$"
+        },
+        {
+          "index":19,
+          "data":"ashTemperature",
+          "value":0.0,
+          "title":"飞灰的温度",
+          "latexItem":"$t_{fh}$"
+        },
+        {
+          "index":20,
+          "data":"clinkerTemperature",
+          "value":0.0,
+          "title":"熟料出回转窑的温度",
+          "latexItem":"$t_{Ysh}$"
+        },
+        {
+          "index":21,
+          "data":"aluminumOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化铝",
+          "latexItem":"$Al_2O_3^{sh}$"
+        },
+        {
+          "index":22,
+          "data":"magnesiumOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化镁",
+          "latexItem":"$MgO^{sh}$"
+        },
+        {
+          "index":23,
+          "data":"calciumOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化钙",
+          "latexItem":"$CaO^{sh}$"
+        },
+        {
+          "index":24,
+          "data":"siliconDioxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化硅",
+          "latexItem":"$SiO_2^{sh}$"
+        },
+        {
+          "index":25,
+          "data":"ironOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化铁",
+          "latexItem":"$Fe_2O_3^{sh}$"
+        },
+        {
+          "index":26,
+          "data":"sodiumOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化钠",
+          "latexItem":"$Na_2O^{sh}$"
+        },
+        {
+          "index":27,
+          "data":"potassiumOxideContent",
+          "value":0.0,
+          "title":"熟料中的氧化钾",
+          "latexItem":"$K_2O^{sh}$"
+        },
+        {
+          "index":28,
+          "data":"sulfurTioxideContent",
+          "value":0.0,
+          "title":"熟料中的三氧化硫",
+          "latexItem":"$SO_3^{sh}$"
+        },
+        {
+          "index":29,
+          "data":"sodiumOxideContentRaw",
+          "value":0.0,
+          "title":"生料中的氧化钠",
+          "latexItem":"$Na_2O^{s}$"
+        },
+        {
+          "index":30,
+          "data":"potassiumOxideContentRaw",
+          "value":0.0,
+          "title":"生料中的氧化钾",
+          "latexItem":"$K_2O^{s}$"
+        },
+        {
+          "index":31,
+          "data":"sulfurTioxideContentRaw",
+          "value":0.0,
+          "title":"生料中的三氧化硫",
+          "latexItem":"$SO_3^{s}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Cooler",
+      "menu_title": "冷却机",
+      "latexList": [
+        {
+          "latexItem": "$$ \\rho_f=\\frac{C O_2^f \\times \\rho_{C O_2}+C O^f \\times \\rho_{C O}+O_2^f \\times \\rho_{O_2}+N_2^f \\times \\rho_{N_2}+H_2 O^f \\times \\rho_{H_2 O}}{100}\n $$",
+          "latexContent": "预热器废气计算公式"
+        }
+      ],
+      "markDownText": "",
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyAirVolume",
+          "value":0.0,
+          "title":"每小时进入冷却机的空气体积",
+          "latexItem":"$V_{Lk}$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyWasterGasVolume",
+          "value":0.0,
+          "title":"每小时出冷却机的废气量",
+          "latexItem":"$V_{Pk}$"
+        },
+        {
+          "index":4,
+          "data":"hourlyCoalMillAirVolume",
+          "value":0.0,
+          "title":"每小时煤磨抽冷却机空气的体积",
+          "latexItem":"$V_{Rk}$"
+        },
+        {
+          "index":5,
+          "data":"hourlySecondAirVolume",
+          "value":0.0,
+          "title":"每小时进入回转窑的二次空气的体积",
+          "latexItem":"$V_{2k}$"
+        },
+        {
+          "index":6,
+          "data":"hourlyThirdAirVolume",
+          "value":0.0,
+          "title":"每小时进入分解炉三次空气体积",
+          "latexItem":"$V_{3k}$"
+        },
+        {
+          "index":7,
+          "data":"hourlyAQCAirVolume",
+          "value":0.0,
+          "title":"每小时AQC锅炉抽冷却机空气体积",
+          "latexItem":"$V_{Ak}$"
+        },
+        {
+          "index":8,
+          "data":"ashDensity",
+          "value":0.0,
+          "title":"废气中飞灰的浓度",
+          "latexItem":"$K_{Lfh}$"
+        },
+        {
+          "index":9,
+          "data":"airDensity",
+          "value":0.0,
+          "title":"空气的密度",
+          "latexItem":"$\\rho_k$"
+        },
+        {
+          "index":10,
+          "data":"coolingMachineAshMassStream",
+          "value":0.0,
+          "title":"出冷却机的低温水泥熟料",
+          "latexItem":"$m_{Lsh}$"
+        },
+        {
+          "index":11,
+          "data":"airSpecificHeat",
+          "value":0.0,
+          "title":"空气的显热",
+          "latexItem":"$C_k$"
+        },
+        {
+          "index":12,
+          "data":"airTemperature",
+          "value":0.0,
+          "title":"回转窑的空气温度",
+          "latexItem":"$t_k$"
+        },
+        {
+          "index":13,
+          "data":"clinkerTemperature",
+          "value":0.0,
+          "title":"熟料出回转窑的温度",
+          "latexItem":"$t_{Ysh}$"
+        },
+        {
+          "index":14,
+          "data":"secondAirTemperature",
+          "value":0.0,
+          "title":"二次空气进入回转窑的温度",
+          "latexItem":"$t_{2k}$"
+        },
+        {
+          "index":15,
+          "data":"thirdAirTemperature",
+          "value":0.0,
+          "title":"进入分解炉的 三次空气的温度",
+          "latexItem":"$t_{F3k}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "AQCBoilder",
+      "menu_title": "AQC锅炉",
+      "latexList": [
+        {
+          "latexItem": "$$ \\rho_f=\\frac{C O_2^f \\times \\rho_{C O_2}+C O^f \\times \\rho_{C O}+O_2^f \\times \\rho_{O_2}+N_2^f \\times \\rho_{N_2}+H_2 O^f \\times \\rho_{H_2 O}}{100}\n $$",
+          "latexContent": "预热器废气计算公式"
+        }
+      ],
+      "markDownText": "",
+      "inputList":[
+        {
+          "index":1,
+          "data":"hourlyAQCAirVolume",
+          "value":0.0,
+          "title":"每小时AQC锅炉抽冷却机空气体积",
+          "latexItem":"$V_{Ak}$"
+        },
+        {
+          "index":2,
+          "data":"hourlyClinkerProduction",
+          "value":0.0,
+          "title":"每小时熟料产量",
+          "latexItem":"$M_{sh}$"
+        },
+        {
+          "index":3,
+          "data":"hourlyAirVolume",
+          "value":0.0,
+          "title":"每小时进入冷却机的空气体积",
+          "latexItem":"$V_{Ak}$"
+        },
+        {
+          "index":4,
+          "data":"hourlyLiquidWater",
+          "value":0.0,
+          "title":"每小时进入AQC 锅炉的液态水的体积",
+          "latexItem":"$V_{Aw}$"
+        },
+        {
+          "index":5,
+          "data":"hourlyWaterVaporVolume",
+          "value":0.0,
+          "title":"每小时离开AQC锅炉的水蒸气体积",
+          "latexItem":"$V_{Azq}$"
+        },
+        {
+          "index":6,
+          "data":"ashDensity",
+          "value":0.0,
+          "title":"冷却机的空气中飞灰的浓度",
+          "latexItem":"$K_{Lfh}$"
+        },
+        {
+          "index":7,
+          "data":"airDensity",
+          "value":0.0,
+          "title":"空气的密度",
+          "latexItem":"$\\rho_k$"
+        },
+        {
+          "index":8,
+          "data":"airSpecificHeat",
+          "value":0.0,
+          "title":"空气的显热",
+          "latexItem":"$C_Ak$"
+        },
+        {
+          "index":9,
+          "data":"ashSpecificHeat",
+          "value":0.0,
+          "title":"来自冷却机的飞灰的比热",
+          "latexItem":"$C_{Afh}$"
+        },
+        {
+          "index":10,
+          "data":"airTemperature",
+          "value":0.0,
+          "title":"空气的温度",
+          "latexItem":"$t_{Ak}$"
+        },
+        {
+          "index":11,
+          "data":"liquidWaterTemperature",
+          "value":0.0,
+          "title":"进入AQC锅炉的液态水的温度",
+          "latexItem":"$t_{Aw}$"
+        },
+        {
+          "index":12,
+          "data":"waterVaporTemperature",
+          "value":0.0,
+          "title":"离开的水蒸气的温度",
+          "latexItem":"$t_{zq}$"
+        }
+      ],
+      "paramList": [
+        {
+          "index": 1,
+          "data": "carbonMonoxideVolumeFraction",
+          "value": 0.1,
+          "title": "一氧化碳气体体积分数",
+          "latexItem": "$\\mathrm{CO}^f$"
         }
       ]
     }

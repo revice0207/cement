@@ -26,7 +26,6 @@ const carbonDioxideDensity = 1.98;
 const waterVaporDensity = 0.6;
 const oxygenDensity = 1.429;
 const nitrogenDensity = 0.81;
-const liquidWaterDensity = 1000;
 const standardAirDensity = 1.293; // 标准情况下的空气密度
 //---------------------------------------------------------------------------------------------
 const standardAirSpecificHeat = 1009;
@@ -50,16 +49,13 @@ const oxygenSpecificHeatWasterGas = 918;
 const nitrogenSpecificHeatWasterGas = 1040;
 
 const coalPowderSpecificHeat = 1000;
-const wasterGasSpecificHeat = 1100;
 const ashSpecificHeat = 1200;
 const rawMaterialSpecificHeat = 100;
 //---------------------------------------------------------------------------------------------
-// 温度常量
-const waterVaporTemperature = 100;
 // 流程执行函数
 
 // 1.进入节点的物质流总量
-export function fun2(
+export function fun3(
     hourlyCoalPowder,
     hourlyClinkerProduction,
     hourlyFirstAirVolume,
@@ -73,7 +69,6 @@ export function fun2(
     thirdAirTemperature,
     airTemperature,
     wasterGasTemperature,
-    ashTemperature,
     rawMaterialTemperature,
     waterContent,
     magnesiumOxideContent,
@@ -85,9 +80,9 @@ export function fun2(
     coalHeatingValue
 ){
     let totalEnteringMassStream = cal_total_massStream_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, hourlyFirstAirVolume, hourlyThirdAirVolume, hourlyRawMaterial, hourlyLeakageVolume, hourlyWasterGasVolume, hourlyAshVolume, ashDensity)
-    let totalEnteringSensible = cal_total_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, hourlyFirstAirVolume, hourlyThirdAirVolume, hourlyLeakageVolume, hourlyAshVolume, coalHeatingValue, ashDensity, rawMaterialWaterContent, coalPowderTemperature, firstAirTemperature, thirdAirTemperature, airTemperature, wasterGasTemperature, ashTemperature, rawMaterialTemperature)
+    let totalEnteringSensible = cal_total_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, hourlyFirstAirVolume, hourlyThirdAirVolume, hourlyLeakageVolume, hourlyAshVolume, coalHeatingValue, ashDensity, rawMaterialWaterContent, coalPowderTemperature, firstAirTemperature, thirdAirTemperature, airTemperature, wasterGasTemperature, rawMaterialTemperature)
     let totalLeavingMassStream = cal_total_massStream_leavingNode(hourlyCoalPowder, hourlyWasterGasVolume, hourlyAshVolume, hourlyClinkerProduction, ashDensity)
-    let totalLeavingSensible = cal_total_energyStream_leavingNode(hourlyRawMaterial, hourlyClinkerProduction, rawMaterialTemperature, hourlyAshVolume, wasterGasTemperature, ashDensity, ashTemperature, ashLoss, rawMaterialLoss, waterContent, magnesiumOxideContent, calciumOxideContent)
+    let totalLeavingSensible = cal_total_energyStream_leavingNode(hourlyRawMaterial, hourlyClinkerProduction,hourlyCoalPowder, rawMaterialTemperature, hourlyAshVolume, wasterGasTemperature, ashDensity, ashLoss, rawMaterialLoss, waterContent, magnesiumOxideContent, calciumOxideContent)
 
     // 可计算物质流损失比和热效率
     let massStreamRatio = totalLeavingMassStream / totalEnteringMassStream * 100;
@@ -192,7 +187,6 @@ function cal_total_sensible_enteringNode(
     thirdAirTemperature,
     airTemperature,
     wasterGasTemperature,
-    ashTemperature,
     rawMaterialTemperature
 ){
     let coalPowderSensible = cal_coalPowder_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, coalPowderTemperature);
@@ -202,7 +196,7 @@ function cal_total_sensible_enteringNode(
     let leakageSensible = cal_leakage_sensible_enteringNode(hourlyLeakageVolume, hourlyClinkerProduction, airTemperature)
     let coalPowderBurningSensible = cal_coalPowderBurning_sensible_enteringNode(hourlyCoalPowder, hourlyClinkerProduction, coalHeatingValue)
     let wasterGasSensible = cal_wasterGas_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, wasterGasTemperature)
-    let ashSensible = cal_ash_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashTemperature)
+    let ashSensible = cal_ash_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, wasterGasTemperature)
 
     let totalEnteringNodeSensible = coalPowderSensible + firstAirSensible + thirdAirSensible + rawMaterialSensible + leakageSensible + coalPowderBurningSensible + wasterGasSensible + ashSensible
     return totalEnteringNodeSensible;
@@ -268,9 +262,9 @@ function cal_wasterGas_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProdu
     return wasterGasSensible;
 }
 // 2-8 飞灰显热
-function cal_ash_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashTemperature){
+function cal_ash_sensible_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, wasterGasTemperature){
     let ashMassStream = cal_ash_massStream_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity);
-    let ashSensible = ashMassStream * ashSpecificHeat * ashTemperature;
+    let ashSensible = ashMassStream * ashSpecificHeat * wasterGasTemperature;
     return ashSensible;
 }
 // 3.离开冷却炉的物质流
@@ -314,11 +308,11 @@ function cal_ash_massStream_leavingNode(hourlyAshVolume, hourlyClinkerProduction
 function cal_total_energyStream_leavingNode(
     hourlyRawMaterial,
     hourlyClinkerProduction,
+    hourlyCoalPowder,
     rawMaterialTemperature,
     hourlyAshVolume,
     wasterGasTemperature,
     ashDensity,
-    ashTemperature,
     ashLoss,
     rawMaterialLoss,
     waterContent,
@@ -327,7 +321,7 @@ function cal_total_energyStream_leavingNode(
 ){
     let rawMaterialSensible = cal_rawMaterial_sensible_leavingNode(hourlyRawMaterial, hourlyClinkerProduction, rawMaterialTemperature);
     let wasterGasSensible = cal_wasterGas_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, wasterGasTemperature);
-    let ashSensible = cal_ash_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashTemperature);
+    let ashSensible = cal_ash_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, wasterGasTemperature);
     let ashDehydrationAndDecompositionHeatSensible = cal_ashDehydrationAndDecompositionHeat_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashLoss, rawMaterialLoss, waterContent, magnesiumOxideContent, calciumOxideContent)
     let coalPowderBurningSensible = cal_coalPowderBurning_sensible_leavingNode(hourlyCoalPowder, hourlyClinkerProduction);
 
@@ -353,9 +347,9 @@ function cal_wasterGas_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduc
     return wasterGasSensible;
 }
 // 4-3 飞灰显热
-function cal_ash_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, ashTemperature){
+function cal_ash_sensible_leavingNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity, wasterGasTemperature){
     let ashMassStream = cal_ash_massStream_enteringNode(hourlyAshVolume, hourlyClinkerProduction, ashDensity);
-    let ashSensible = ashMassStream * ashSpecificHeat * ashTemperature;
+    let ashSensible = ashMassStream * ashSpecificHeat * wasterGasTemperature;
     return ashSensible;
 }
 // 4-4 飞灰脱水和碳酸盐分解热
