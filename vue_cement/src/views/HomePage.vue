@@ -35,12 +35,16 @@
         </template>
         <template #extra>
           <div class="flex items-center">
-            <el-button circle>
-              <el-icon><Sunny /></el-icon>
-            </el-button>
-            <el-button circle>
-              <el-icon><Moon /></el-icon>
-            </el-button>
+			<a href="/flow_data_page/index.html" target="_blank" rel="noopener noreferrer" style="margin-right: 20px;">
+				<el-button circle>
+					<el-icon><PieChart /></el-icon>
+				</el-button>
+			</a>
+			<a href="/big_data_page/index.html" target="_blank" rel="noopener noreferrer">
+				<el-button circle>
+					<el-icon><Histogram /></el-icon>
+				</el-button>
+			</a>
           </div>
         </template>
       </el-page-header>
@@ -55,7 +59,11 @@
           :collapse-transition="false"
           class="menu_list"
         >
-          <el-menu-item v-for="(item, index) in menuList" :key="index" @click="changeModel(item.title, index)">
+          <el-menu-item 
+			v-for="(item, index) in menuList" 
+			:key="index" 
+			@click="changeModel(item.title, index)"
+			>
             <el-icon><component :is="item.icon" /></el-icon>
             <template #title>{{ item.title }}</template>
           </el-menu-item>
@@ -104,7 +112,7 @@
                   <div v-katex style="width: 60%;margin-right: 10px; font-size: 12px">{{ item.latexItem }} : {{ item.title }}</div>
                   <el-input-number
                     v-model="item.value"
-                    :precision="2"
+                    :precision="4"
                     :step="1"
                     class="input_component"
                     size="small"
@@ -165,7 +173,12 @@
             </el-table>
             <div class="data_latex">
               <el-text style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;color: #808080">相关公式</el-text>
-              <el-carousel height="150px">
+				<el-carousel 
+					height="150px"
+					autoplay
+					trigger="hover"
+					interval=2000
+				>
                 <el-carousel-item class="latex_wrap" v-for="item in latexList" :key="item" >
                   <div v-katex class="latex_item">{{ item.latexItem }}</div>
                   <span class="latex_content">{{ item.latexContent }}</span>
@@ -189,8 +202,12 @@ import * as echarts from 'echarts'
 import katex from 'katex'
 import MarkdownIt from 'markdown-it'
 import cement_data from '@/data/cement_data.json'
-//import {fun1} from '@/calculate/PH_Boilder';
+import {fun1} from '@/calculate/PH_Boilder';
 import {fun2} from '@/calculate/SuspensionPreheater';
+import {fun3} from '@/calculate/StratifiedFurnace';
+import {fun4} from '@/calculate/RotaryKiln';
+import {fun5} from '@/calculate/Cooler';
+import {fun6} from '@/calculate/AQC_Boilder'
 import * as XLSX from 'xlsx';
 export default {
   name: "HomePage",
@@ -199,6 +216,7 @@ export default {
     return{
       isCollapse:true,
       title:"",
+      flow: "", // 选择的流程
       // Collapse:"展开",
       uploadFiles:[],
       tempFile:"",
@@ -210,11 +228,11 @@ export default {
       markDownText:"",
       // cement_data:cement_data.data[0]
       formData:{},
-      formRules:{} // 动态生成表单验证规则
+      formRules:{}, // 动态生成表单验证规则
     }
   },
   methods:{
-    // 切换菜单
+    // 分页切换
     changeModel(title, index){
       this.title = title
       console.log(index)
@@ -222,54 +240,56 @@ export default {
       this.paramList = JSON.parse(JSON.stringify(cement_data)).data[index].paramList
       this.markDownText = JSON.parse(JSON.stringify(cement_data)).data[index].markDownText
       this.latexList = JSON.parse(JSON.stringify(cement_data)).data[index].latexList
+      this.flow = JSON.parse(JSON.stringify(cement_data)).data[index].name
     },
     // 处理上传文件
     async handleUpload(){
-      let file = this.uploadFiles[0]
-      let reader = new FileReader()
-
-      const readAsArrayBuffer = (file) => {
-        return new Promise((resolve, reject) => {
-          reader.onload = (e) => resolve(e.target.result);
-          reader.onerror = reject;
-          reader.readAsArrayBuffer(file.raw);
-        });
-      };
-      try {
-        // 读取文件为 ArrayBuffer
-        const arrayBuffer = await readAsArrayBuffer(file);
-        // 将 ArrayBuffer 转换为 xlsx 工作簿
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        // 假设您要读取第一个工作表
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-
-        // 将工作表数据转换为 JSON 对象
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-        const dataList = jsonData.map((row) => row);
-
-        this.inputList.forEach((item, index) => {
-          // 获取键名为 12 的值
-          item.value = dataList[index]['数值'];
-        });
-        // 读取txt
-        // this.tempFile = await readAsText(file);
-        // const lines = this.tempFile.split("\n");
-        // console.log(this.tempFile)
-        // const dataList = []
-        // lines.forEach((line) => {
-        //   // 将每行数据按逗号分割成两部分
-        //   const parts = line.split(',');
-        //   // 提取第二部分的数值并转换为浮点数
-        //   dataList.push(parseFloat(parts[1]));
-        // });
-        // this.inputList.forEach((item, index)=>{
-        //   item.value = dataList[index];
-        // })
-      } catch (error) {
-        console.error('读取文件失败:', error);
-      }
+		console.log("TEST");
+        let file = this.uploadFiles[0]
+        let reader = new FileReader()
+    
+        const readAsArrayBuffer = (file) => {
+            return new Promise((resolve, reject) => {
+				reader.onload = (e) => resolve(e.target.result);
+				reader.onerror = reject;
+				reader.readAsArrayBuffer(file.raw);
+			});
+        };
+        try {
+            // 读取文件为 ArrayBuffer
+            const arrayBuffer = await readAsArrayBuffer(file);
+            // 将 ArrayBuffer 转换为 xlsx 工作簿
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+            // 假设您要读取第一个工作表
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+    
+            // 将工作表数据转换为 JSON 对象
+            const jsonData = XLSX.utils.sheet_to_json(sheet);
+    
+            const dataList = jsonData.map((row) => row);
+    
+            this.inputList.forEach((item, index) => {
+				// 获取键名为 12 的值
+				item.value = dataList[index]['数值'];
+            });
+            // 读取txt
+            // this.tempFile = await readAsText(file);
+            // const lines = this.tempFile.split("\n");
+            // console.log(this.tempFile)
+            // const dataList = []
+            // lines.forEach((line) => {
+            //   // 将每行数据按逗号分割成两部分
+            //   const parts = line.split(',');
+            //   // 提取第二部分的数值并转换为浮点数
+            //   dataList.push(parseFloat(parts[1]));
+            // });
+            // this.inputList.forEach((item, index)=>{
+            //   item.value = dataList[index];
+            // })
+        } catch (error) {
+			console.error('读取文件失败:', error);
+        }
     },
     // 上传成功的处理
     handleSuccess(file, fileList){
@@ -354,23 +374,71 @@ export default {
         console.log("fail")
       }
     },
+	// 保存数据
+	saveLocalStorageData(key, data){
+		localStorage.setItem(key, JSON.stringify(data))
+	},
+	// 更新数据
+	updateLocalStorageData(key, result){
+		let data = JSON.parse(localStorage.getItem(key))
+		console.log(result, "RESULT");	
+		if(data == null){
+			console.log("THIS IS FIRST DATA");
+			data = {
+				name:key,
+				massStreamRatioList:[], 
+				thermalEfficiencyList:[]
+			}
+		}
+		data.massStreamRatioList.push(result[0])
+		data.thermalEfficiencyList.push(result[1])
+		this.saveLocalStorageData(key, data)	
+	},
+	// 加载数据
+	getLocalStorageData(key){
+		let dataList = localStorage.getItem(key)
+		return dataList
+	},
     starCalculate(){
       console.log(this.formRules)
       this.$refs.inputForm.validate((valid)=>{
         console.log("before validate")
         // 通过验证
         if(valid){
-          console.log("start validate")
-          let params = []
-          this.inputList.forEach((item)=>{
-            params.push(item.value)
-          })
-          //let result = fun1(...params)
-          let result = fun2(...params)
-          console.log(result)
-          this.createChart(this.$refs.pieChart1, result[0])
-          this.createChart(this.$refs.pieChart2, result[1])
-          this.createChart(this.$refs.pieChart3, (1 - result[1]))
+			console.log("start validate")
+			let params = []
+			this.inputList.forEach((item)=>{
+				params.push(item.value)
+			})
+			let result
+			switch(this.flow){    
+				case "PH_Boiler":
+					result =  fun1(...params)
+					break
+				case "SuspensionPreheater":
+					result =  fun2(...params)
+					break
+				case "StratifiedFurnace":
+					result =  fun3(...params)
+					break
+				case "RotaryKiln":
+					result =  fun4(...params)
+					break
+				case "Cooler":
+					result =  fun5(...params)
+					break
+				case "AQCBoilder":
+					result =  fun6(...params)
+					break
+				default:
+					result = fun1(...params)
+					break
+			}
+			this.createChart(this.$refs.pieChart1, result[0])
+			this.createChart(this.$refs.pieChart2, result[1])
+			this.createChart(this.$refs.pieChart3, (1 - result[1]))
+			// localStorage
+			this.updateLocalStorageData(this.flow, result)
         }else{
           this.$message.error('请填写非0的数值信息');
           this.$refs.inputForm.clearValidate(); // 清空表单项的错误信息
